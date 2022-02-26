@@ -1,25 +1,25 @@
 /**
 ******************************************************************************
-* @ÎÄ¼þ	 libinimini.c
-* @°æ±¾	 V1.0.0
-* @ÈÕÆÚ	 2022-02-26
-* @¸ÅÒª	 
-*		 1. ÊÊÓÃÓÚÔÚÅÜ RTOS »òÂãÅÜµÄµ¥Æ¬»úÆ½Ì¨ÉÏ¶ÁÈ¡ ini ÅäÖÃÎÄ¼þ¡£
-*		 2. Òòµ¥Æ¬»ú RAM Ï¡ÓÐÐÔ,½Ó¿Ú²»»á¶¯Ì¬ÉêÇë, ËùÐèµÄÄÚ´æÓÉÍâ²¿Ìá¹©¡£
-*		 3. Òòµ¥Æ¬»úµÄÎÄ¼þÏµÍ³²îÒìºÍÊý¾ÝÀ´Ô´·á¸», ½Ó¿ÚÊµÏÖ²»¾ÖÏÞÓÚÎÄ¼þ¡£
-* @×÷Õß	 lmx   QQ:1007566569   EMAIL:lovemengx@foxmail.com
+* @æ–‡ä»¶	 libinimini.c
+* @ç‰ˆæœ¬	 V1.0.0
+* @æ—¥æœŸ	 2022-02-26
+* @æ¦‚è¦	 
+*		 1. é€‚ç”¨äºŽåœ¨è·‘ RTOS æˆ–è£¸è·‘çš„å•ç‰‡æœºå¹³å°ä¸Šè¯»å– ini é…ç½®æ–‡ä»¶ã€‚
+*		 2. å› å•ç‰‡æœº RAM ç¨€æœ‰æ€§,æŽ¥å£ä¸ä¼šåŠ¨æ€ç”³è¯·, æ‰€éœ€çš„å†…å­˜ç”±å¤–éƒ¨æä¾›ã€‚
+*		 3. å› å•ç‰‡æœºçš„æ–‡ä»¶ç³»ç»Ÿå·®å¼‚å’Œæ•°æ®æ¥æºä¸°å¯Œ, æŽ¥å£å®žçŽ°ä¸å±€é™äºŽæ–‡ä»¶ã€‚
+* @ä½œè€…	 lmx   QQ:1007566569   EMAIL:lovemengx@foxmail.com
 ******************************************************************************
-* @×¢Òâ
+* @æ³¨æ„
 ******************************************************************************
 */
 #include <string.h>
 #include "libinimini.h"
 
 /********************************************************************
-*	º¯Êý: 		libinimini_is_comment
-*	¹¦ÄÜ:		ÅÐ¶Ï×Ö·û´®ÊÇ·ñÎª×¢½â
-*	²ÎÊý:		buf:×Ö·û´®	len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:²»ÊÇ ini µÄ×¢ÊÍÎÄ±¾  1:Îª ini µÄ×¢ÊÍÎÄ±¾  			
+*	å‡½æ•°: 		libinimini_is_comment
+*	åŠŸèƒ½:		åˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦ä¸ºæ³¨è§£
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²	len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:ä¸æ˜¯ ini çš„æ³¨é‡Šæ–‡æœ¬  1:ä¸º ini çš„æ³¨é‡Šæ–‡æœ¬  			
 *********************************************************************/
 static inline unsigned int libinimini_is_comment(char* buf, unsigned int len)
 {
@@ -27,10 +27,10 @@ static inline unsigned int libinimini_is_comment(char* buf, unsigned int len)
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_is_section
-*	¹¦ÄÜ:		ÅÐ¶Ï×Ö·û´®ÊÇ·ñÎª×Ö¶ÎÀàÐÍ
-*	²ÎÊý:		buf:×Ö·û´®	len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:²»ÊÇ ini µÄ×Ö¶ÎÎÄ±¾  1:Îª ini µÄ×Ö¶ÎÎÄ±¾
+*	å‡½æ•°: 		libinimini_is_section
+*	åŠŸèƒ½:		åˆ¤æ–­å­—ç¬¦ä¸²æ˜¯å¦ä¸ºå­—æ®µç±»åž‹
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²	len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:ä¸æ˜¯ ini çš„å­—æ®µæ–‡æœ¬  1:ä¸º ini çš„å­—æ®µæ–‡æœ¬
 *********************************************************************/
 static inline unsigned int libinimini_is_section(char* buf, unsigned int len)
 {
@@ -38,10 +38,10 @@ static inline unsigned int libinimini_is_section(char* buf, unsigned int len)
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_is_section
-*	¹¦ÄÜ:		ÒÆ³ý×Ö·û´®µÄÇ°ºó¿Õ¸ñ»òÖÆ±í·ûºÅ
-*	²ÎÊý:		buf:×Ö·û´®	len:×Ö·û´®³¤¶È
-*	·µ»Ø:		´¦ÀíºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_is_section
+*	åŠŸèƒ½:		ç§»é™¤å­—ç¬¦ä¸²çš„å‰åŽç©ºæ ¼æˆ–åˆ¶è¡¨ç¬¦å·
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²	len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		å¤„ç†åŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_remove_frontback_space(char* buf, unsigned int len)
 {
@@ -66,10 +66,10 @@ static inline unsigned int libinimini_remove_frontback_space(char* buf, unsigned
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_terminator_stringt
-*	¹¦ÄÜ:		Ñ°ÕÒÖ¸¶¨×Ö·û²¢ÔÚ¸Ã´¦½Ø¶Ï×Ö·û´®
-*	²ÎÊý:		buf:×Ö·û´®	len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:Î´ÕÒµ½  >0:ÒÑÕÒµ½²¢½Ø¶ÏºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_terminator_stringt
+*	åŠŸèƒ½:		å¯»æ‰¾æŒ‡å®šå­—ç¬¦å¹¶åœ¨è¯¥å¤„æˆªæ–­å­—ç¬¦ä¸²
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²	len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:æœªæ‰¾åˆ°  >0:å·²æ‰¾åˆ°å¹¶æˆªæ–­åŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_terminator_stringt(char ech, char* buf, unsigned int len)
 {
@@ -82,10 +82,10 @@ static inline unsigned int libinimini_terminator_stringt(char ech, char* buf, un
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_extract_string
-*	¹¦ÄÜ:		ÌáÈ¡ÔÚ sch ×Ö·ûºÍ ech ×Ö·ûÖ®¼äµÄ×Ö·û´®
-*	²ÎÊý:		sch:ÆðÊ¼×Ö·û  ech:½áÊø×Ö·û  buf:×Ö·û´®  len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:Î´ÕÒµ½  >0:ÌáÈ¡³É¹¦ºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_extract_string
+*	åŠŸèƒ½:		æå–åœ¨ sch å­—ç¬¦å’Œ ech å­—ç¬¦ä¹‹é—´çš„å­—ç¬¦ä¸²
+*	å‚æ•°:		sch:èµ·å§‹å­—ç¬¦  ech:ç»“æŸå­—ç¬¦  buf:å­—ç¬¦ä¸²  len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:æœªæ‰¾åˆ°  >0:æå–æˆåŠŸåŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_extract_string(char sch, char ech, char* buf, unsigned int len)
 {
@@ -104,10 +104,10 @@ static inline unsigned int libinimini_extract_string(char sch, char ech, char* b
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_find_strval
-*	¹¦ÄÜ:		ÌáÈ¡¼üµÄÖµ
-*	²ÎÊý:		buf:×Ö·û´®  len:×Ö·û´®³¤¶È
-*	·µ»Ø:		ÌáÈ¡³É¹¦ºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_find_strval
+*	åŠŸèƒ½:		æå–é”®çš„å€¼
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²  len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		æå–æˆåŠŸåŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_find_strval(char* buf, unsigned int len)
 {
@@ -120,10 +120,10 @@ static inline unsigned int libinimini_find_strval(char* buf, unsigned int len)
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_find_keyname
-*	¹¦ÄÜ:		ÌáÈ¡¼üÃû
-*	²ÎÊý:		buf:×Ö·û´®  len:×Ö·û´®³¤¶È  valpos:·µ»Ø¼üÖµµÄÆðÊ¼Î»ÖÃ
-*	·µ»Ø:		0:Î´ÕÒµ½¼üÃû  >0: ÌáÈ¡³É¹¦ºóµÄ×Ö·û´®³¤¶ÈÒÔ¼°¼üÖµµÄÆðÊ¼Î»ÖÃ
+*	å‡½æ•°: 		libinimini_find_keyname
+*	åŠŸèƒ½:		æå–é”®å
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²  len:å­—ç¬¦ä¸²é•¿åº¦  valpos:è¿”å›žé”®å€¼çš„èµ·å§‹ä½ç½®
+*	è¿”å›ž:		0:æœªæ‰¾åˆ°é”®å  >0: æå–æˆåŠŸåŽçš„å­—ç¬¦ä¸²é•¿åº¦ä»¥åŠé”®å€¼çš„èµ·å§‹ä½ç½®
 *********************************************************************/
 static inline unsigned int libinimini_find_keyname(char* buf, unsigned int len, unsigned int* valpos)
 {
@@ -137,10 +137,10 @@ static inline unsigned int libinimini_find_keyname(char* buf, unsigned int len, 
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_find_section
-*	¹¦ÄÜ:		ÌáÈ¡×Ö¶Î
-*	²ÎÊý:		buf:×Ö·û´®  len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:Î´ÕÒµ½×Ö¶Î  >0:ÌáÈ¡³É¹¦ºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_find_section
+*	åŠŸèƒ½:		æå–å­—æ®µ
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²  len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:æœªæ‰¾åˆ°å­—æ®µ  >0:æå–æˆåŠŸåŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_find_section(char* buf, unsigned int len)
 {
@@ -152,10 +152,10 @@ static inline unsigned int libinimini_find_section(char* buf, unsigned int len)
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_pre_process
-*	¹¦ÄÜ:		¶ÔÔ­Ê¼×Ö·û´®µÄÔ¤´¦Àí,ÈçÒÆ³ý»»ÐÐ·ûºÍ¿Õ¸ñ¡¢¼ì²éÊÍ·ÅÎª×¢ÊÍ
-*	²ÎÊý:		buf:×Ö·û´®  len:×Ö·û´®³¤¶È
-*	·µ»Ø:		0:Ô¤´¦ÀíÊ§°Ü»òÊÇ×¢ÊÍÎÄ±¾  >0:·µ»Ø´¦ÀíºóµÄ×Ö·û´®³¤¶È
+*	å‡½æ•°: 		libinimini_pre_process
+*	åŠŸèƒ½:		å¯¹åŽŸå§‹å­—ç¬¦ä¸²çš„é¢„å¤„ç†,å¦‚ç§»é™¤æ¢è¡Œç¬¦å’Œç©ºæ ¼ã€æ£€æŸ¥é‡Šæ”¾ä¸ºæ³¨é‡Š
+*	å‚æ•°:		buf:å­—ç¬¦ä¸²  len:å­—ç¬¦ä¸²é•¿åº¦
+*	è¿”å›ž:		0:é¢„å¤„ç†å¤±è´¥æˆ–æ˜¯æ³¨é‡Šæ–‡æœ¬  >0:è¿”å›žå¤„ç†åŽçš„å­—ç¬¦ä¸²é•¿åº¦
 *********************************************************************/
 static inline unsigned int libinimini_pre_process(char* buf, unsigned int len)
 {
@@ -181,12 +181,12 @@ static inline unsigned int libinimini_pre_process(char* buf, unsigned int len)
 }
 
 /********************************************************************
-*	º¯Êý: 		libinimini_foreach
-*	¹¦ÄÜ:		±éÀúÕû¸ö ini ÅäÖÃÎÄ¼þ, ²¢Í¨¹ý»Øµ÷»ñÈ¡Êý¾ÝºÍÊä³öÄÚÈÝ
-*	²ÎÊý:		para: ²ÎÊýÅäÖÃ
-*				cache:ÓÃÓÚ´¦ÀíÊý¾ÝºÍ·µ»ØÄÚÈÝµÄ»º³åÇø
-*				size: »º³åÇø´óÐ¡, ±ØÐë´óÓÚ×Ö¶ÎÃû³Æ+¼üÖµÄÚÈÝ³¤¶È
-*	·µ»Ø:		ÒÑ±éÀú³É¹¦µÄ ini ÅäÖÃÊýÁ¿
+*	å‡½æ•°: 		libinimini_foreach
+*	åŠŸèƒ½:		éåŽ†æ•´ä¸ª ini é…ç½®æ–‡ä»¶, å¹¶é€šè¿‡å›žè°ƒèŽ·å–æ•°æ®å’Œè¾“å‡ºå†…å®¹
+*	å‚æ•°:		para: å‚æ•°é…ç½®
+*				cache:ç”¨äºŽå¤„ç†æ•°æ®å’Œè¿”å›žå†…å®¹çš„ç¼“å†²åŒº
+*				size: ç¼“å†²åŒºå¤§å°, å¿…é¡»å¤§äºŽå­—æ®µåç§°+é”®å€¼å†…å®¹é•¿åº¦
+*	è¿”å›ž:		å·²éåŽ†æˆåŠŸçš„ ini é…ç½®æ•°é‡
 *********************************************************************/
 int libinimini_foreach(libinimini_parameter_t* para, char* cache, unsigned int size)
 {
@@ -197,12 +197,12 @@ int libinimini_foreach(libinimini_parameter_t* para, char* cache, unsigned int s
 	memset(&data, 0x00, sizeof(libinimini_data_t));
 	while ((len = para->ops.getline_cb(buf, buflen, para->contex)) > 0)
 	{
-		// ¶ÔÊý¾Ý½øÐÐÔ¤´¦Àí
+		// å¯¹æ•°æ®è¿›è¡Œé¢„å¤„ç†
 		if ((len = libinimini_pre_process(buf, len)) <= 0) {
 			continue;
 		}
 
-		// ÅÐ¶ÏÊÇ·ñÎª¶ÎÂä
+		// åˆ¤æ–­æ˜¯å¦ä¸ºæ®µè½
 		if (libinimini_is_section(buf, len) > 0) {
 			if ((len = libinimini_find_section(buf, len)) > 0) {
 				if (data.section != NULL) {
@@ -218,7 +218,7 @@ int libinimini_foreach(libinimini_parameter_t* para, char* cache, unsigned int s
 			continue;
 		}
 
-		// ³¢ÊÔÌáÈ¡¼üÖµ¶Ô
+		// å°è¯•æå–é”®å€¼å¯¹
 		if (libinimini_find_keyname(buf, len, &valpos) > 0) {
 			if ((len = libinimini_find_strval(buf + valpos + 1, len - valpos - 1)) > 0) {
 				datacnt++;
