@@ -7,10 +7,65 @@
 本着学习的态度，就设计了一个非常简单的 ini 配置文件解析库(libinimini)，具有以下几种特点：
 
 * 内存空间占用可控，libinimini 只使用用户指定的一段内存空间进行解析和返回结果。
-* 不关心数据的来源，libinimini 通过回调用户的接口来获取每一行文本，不关心文本来自于文件还是其它通信接口。
-* 使用方便简单易上手，用户只需实现以行为单位的文本数据的回调接口，之后只需要等待 libinimini 解析结果即可。
+* 不关心数据的来源，libinimini 通过回调用户的接口获取每一行文本，不关心文本来自文件还是其它通信接口。
+* 使用方便简单易上手，用户只需实现以行为单位的文本数据回调接口，之后只需等待 libinimini 解析结果即可。
 
 注意：接口本身会将键值作为字符串传递出来，如果需要转换为数字，调用 atoi() 的函数转换即可。
+
+## 接口介绍
+
+```C
+// 缓冲区回调
+typedef struct {
+	/*****************************************************************************
+	*	函数: 	getline_cb
+	*	功能:	由用户实现, 用于接口库获取 ini 配置文件的每一行字符串的函数
+	*	参数:	buf:由接口库传入的缓冲区, 用于存储一行字符串  size:缓冲区大小
+	*			contex:用户的上下文指针, 由初始化时用户传入
+	*	返回:	0:已无数据可以提供,接口库会停止解析  >0:字符串数据的长度
+	******************************************************************************/
+	unsigned int (*getline_cb)(char* buf, unsigned int size, void* contex);
+}libinimini_buffer_ops;
+
+// ini 配置的某一项字段内容
+typedef struct {
+	const char* section;	// ini 字段字符串
+	const char* keyname;	// ini 键名字符串
+	const char* strval; 	// ini 键值字符串
+}libinimini_data_t;
+
+/*****************************************************************************
+*	函数:		libinimini_result_fun
+*	功能:		接口库解析到完整的配置信息后会通过此回调返回数据
+*	参数:		data:接口库解析成功的配置信息
+*				contex:用户的上下文指针, 由初始化时用户传入
+*	返回:		LIB_INIMINI_KEEP:允许接口库继续解析下一个配置	
+*				LIB_INIMINI_STOP:终止接口库继续解析配置
+******************************************************************************/
+typedef int (*libinimini_result_fun)(libinimini_data_t* data, void* contex);
+
+// 接口参数配置
+typedef struct {
+	libinimini_buffer_ops ops;		// 获取数据的回调
+	libinimini_result_fun result;	// 数据结果的回调
+	void* contex;					// 用户上下文指针
+}libinimini_parameter_t;
+
+/********************************************************************
+*	函数: 		libinimini_foreach
+*	功能:		遍历整个 ini 配置文件, 并通过回调获取数据和输出内容
+*	参数:		para: 参数配置
+*				cache:用于处理数据和返回内容的缓冲区
+*				size: 缓冲区大小, 必须大于字段名称+键值内容长度
+*	返回:		已遍历成功的 ini 配置数量
+*********************************************************************/
+int libinimini_foreach(libinimini_parameter_t* para, char* cache, unsigned int size);
+```
+
+## sys_config.ini (示例配置文件)
+
+![](/images/sys_config.png "sys config")
+
 
 ## Sample (FreeRTOS@xr872)
 
@@ -90,6 +145,7 @@ int main(void)
 	return 0;
 }
 ```
+![](/images/sample_xr872.png "xr872 example")
 
 ## Sample（Windows/Linux）
 
@@ -158,3 +214,4 @@ int main(void)
 }
 	
 ```
+![](/images/sample_windows_linux.png "windows linux example")
