@@ -51,6 +51,7 @@ static inline unsigned int libinimini_remove_frontback_space(char* buf, unsigned
 	while (' ' == *p || '\t' == *p){
 		cnt++, p++;
 	}
+	
 	if ((len = len - cnt) > 0) {
 		if (cnt) {
 			memcpy(buf, buf + cnt, len);
@@ -79,6 +80,24 @@ static inline unsigned int libinimini_terminator_stringt(char ech, char* buf, un
 		return (unsigned int)(k1 - buf);
 	}
 	return 0;
+}
+
+/********************************************************************
+*	函数: 		libinimini_terminator_linefeed
+*	功能:		截取换行符之前的字符串
+*	参数:		buf:字符串	len:字符串长度
+*	返回:		处理后的字符串长度
+*********************************************************************/
+static inline unsigned int libinimini_terminator_linefeed(char* buf, unsigned int len)
+{
+	if((len = libinimini_terminator_stringt('\n', buf, len)) > 0){
+		if('\r' == buf[len-1]){
+			buf[len-1] = '\0';
+			len = len - 1;
+		}
+	}
+
+	return len;
 }
 
 /********************************************************************
@@ -159,14 +178,8 @@ static inline unsigned int libinimini_find_section(char* buf, unsigned int len)
 *********************************************************************/
 static inline unsigned int libinimini_pre_process(char* buf, unsigned int len)
 {
-	unsigned int terlen = 0x00;
-	
-	if ((terlen = libinimini_terminator_stringt('\n', buf, len)) > 0){
-		len = terlen;
-	}
-	
-	if ((terlen = libinimini_terminator_stringt('\r', buf, len)) > 0){
-		len = terlen;
+	if ((len = libinimini_terminator_linefeed(buf, len)) == 0) {
+		return 0;
 	}
 	
 	if ((len = libinimini_remove_frontback_space(buf, len)) == 0) {
