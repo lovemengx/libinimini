@@ -232,7 +232,7 @@ int libinimini_foreach(libinimini_parameter_t* para, char* cache, unsigned int s
 		}
 
 		// 尝试提取键值对
-		if (libinimini_find_keyname(buf, len, &valpos) > 0) {
+		if (data.section && libinimini_find_keyname(buf, len, &valpos) > 0) {
 			if ((len = libinimini_find_strval(buf + valpos + 1, len - valpos - 1)) > 0) {
 				datacnt++;
 				data.keyname = buf;
